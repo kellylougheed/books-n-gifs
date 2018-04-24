@@ -1,0 +1,25 @@
+body {
+    margin: 25px;
+}
+
+#parent, #controls {
+    display: grid;
+    grid-gap: 25px;
+}
+
+#parent {
+    grid-template-columns: repeat(3, 1fr);
+}
+
+#controls {
+    grid-template-columns: 2fr 2fr 1fr;
+}
+
+#controls div {
+    text-align: center;
+}
+
+h1 {
+    text-align: center;
+    font-family: 'Abril Fatface';
+}
