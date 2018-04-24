@@ -15,11 +15,16 @@ body {
     grid-template-columns: 2fr 2fr 1fr;
 }
 
-#controls div {
+#controls div, h1 {
     text-align: center;
 }
 
 h1 {
-    text-align: center;
     font-family: 'Abril Fatface';
+}
+
+@media (max-width: 750px) {
+    #parent, #controls {
+        grid-template-columns: 1fr;
+    }
 }
