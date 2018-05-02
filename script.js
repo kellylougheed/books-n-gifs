@@ -12,28 +12,41 @@ submitButton.addEventListener('click', e => {
     
 });
 
-function getBooksAndGifs(titleQuery, authorQuery) {
+async function getBooksAndGifs(titleQuery, authorQuery) {
     parentDiv.innerHTML = "Loading...";
-    fetch(`https://www.googleapis.com/books/v1/volumes?q=${titleQuery}+inauthor:${authorQuery}&key=AIzaSyCI4ZK774sY9aOofAIPkfo2FnAcE-NMuE0`)
-    .then(function(data) {
-        return data.json();
-    }).then(function(json){
-        let gifs = [];
-        fetch(`https://api.giphy.com/v1/gifs/search?api_key=bUcqXpfbxgQvjT33mQ7ZPfhWhpaKODLA&q=${titleQuery}&limit=${json.items.length}&offset=0&rating=G&lang=en`)
-        .then(function(data) {
-          return data.json()
-        })
-        .then(function(GIFjson) {
-            for (let i = 0; i < json.items.length; i++) {
-                let url = GIFjson.data[i].images.original.url;
-                gifs.push(url);
-            }
-            return gifs;
-        }).then(function(gifs) {
-            printBooks(json, gifs)
-        });
-        ;
-    });
+    // fetch(`https://www.googleapis.com/books/v1/volumes?q=${titleQuery}+inauthor:${authorQuery}&key=AIzaSyCI4ZK774sY9aOofAIPkfo2FnAcE-NMuE0`)
+    // .then(function(data) {
+    //     return data.json();
+    // }).then(function(json){
+    //     let gifs = [];
+    //     fetch(`https://api.giphy.com/v1/gifs/search?api_key=bUcqXpfbxgQvjT33mQ7ZPfhWhpaKODLA&q=${titleQuery}&limit=${json.items.length}&offset=0&rating=G&lang=en`)
+    //     .then(function(data) {
+    //       return data.json()
+    //     })
+    //     .then(function(GIFjson) {
+    //         for (let i = 0; i < json.items.length; i++) {
+    //             let url = GIFjson.data[i].images.original.url;
+    //             gifs.push(url);
+    //         }
+    //         return gifs;
+    //     }).then(function(gifs) {
+    //         printBooks(json, gifs)
+    //     });
+    //     ;
+    // });
+    let response = await fetch(`https://www.googleapis.com/books/v1/volumes?q=${titleQuery}+inauthor:${authorQuery}&key=AIzaSyCI4ZK774sY9aOofAIPkfo2FnAcE-NMuE0`);
+    let books = await response.json();
+    console.log(books);
+    let response2 = await fetch(`https://api.giphy.com/v1/gifs/search?api_key=bUcqXpfbxgQvjT33mQ7ZPfhWhpaKODLA&q=${titleQuery}&limit=${books.items.length}&offset=0&rating=G&lang=en`);
+    console.log(response2);
+    let gifURLs = [];
+    let gifs = await response2.json();
+    console.log(gifs);
+    for (let i = 0; i < books.items.length; i++) {
+        let url = gifs.data[i].images.original.url;
+        gifURLs.push(url);
+    }
+    printBooks(books, gifURLs);
 }
 
 function printBooks(json, gifs) {
